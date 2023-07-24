@@ -91,7 +91,9 @@ class ExampleBlocPage extends StatelessWidget {
                     final name = names[index];
                     return ListTile(
                       onTap: () {
-                        debugPrint('Usuário $name selecionado.');
+                        context
+                            .read<ExampleBloc>()
+                            .add(ExampleRemoveNameEvent(name: name));
                       },
                       title: Text(name),
                     );
