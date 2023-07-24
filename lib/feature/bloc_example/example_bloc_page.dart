@@ -11,24 +11,107 @@ class ExampleBlocPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Bloc Example Page'),
       ),
-      body: BlocBuilder<ExampleBloc, ExampleState>(
-        builder: (context, state) {
+      // BlocLister é responsável em escutar as alterações.
+      body: BlocListener<ExampleBloc, ExampleState>(
+        listener: (context, state) {
           if (state is ExampleStateData) {
-            return ListView.builder(
-              itemCount: state.names.length,
-              itemBuilder: (context, index) {
-                final name = state.names[index];
-                return ListTile(
-                  title: Text(name),
-                );
-              },
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('A quantidade de nomes é ${state.names.length}'),
+              ),
             );
           }
-
-          return const Center(
-            child: Text('Nenhum nome cadastrado.'),
-          );
         },
+        child: Column(
+          children: [
+            BlocConsumer<ExampleBloc, ExampleState>(
+              builder: (_, state) {
+                if (state is ExampleStateData) {
+                  return Text('Total de nomes é ${state.names.length}');
+                }
+                return const SizedBox.shrink();
+              },
+              listener: (context, state) {
+                debugPrint('Estado alterado para ${state.runtimeType}');
+              },
+            ),
+            BlocSelector<ExampleBloc, ExampleState, bool>(
+              selector: (state) {
+                if (state is ExampleStateInitial) {
+                  return true;
+                }
+
+                return false;
+              },
+              builder: (context, showLoader) {
+                if (showLoader) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
+            // Usar esse BlocSelector pra listView ou o BlocBuilder.
+            BlocSelector<ExampleBloc, ExampleState, List<String>>(
+              selector: (state) {
+                if (state is ExampleStateData) {
+                  return state.names;
+                }
+
+                return [];
+              },
+              builder: (context, names) {
+                return ListView.builder(
+                  // Quando tem ListView dentro de uma colum, é necessário essa propriedade para reconhecer
+                  // e montar os elementos.
+                  shrinkWrap: true,
+                  itemCount: names.length,
+                  itemBuilder: (context, index) {
+                    final name = names[index];
+                    return ListTile(
+                      onTap: () {
+                        debugPrint('Usuário $name selecionado.');
+                      },
+                      title: Text(name),
+                    );
+                  },
+                );
+              },
+            ),
+            /*BlocBuilder<ExampleBloc, ExampleState>(
+              builder: (context, state) {
+                if (state is ExampleStateData) {
+                  if (state.names.isNotEmpty) {
+                    return ListView.builder(
+                      // Quando tem ListView dentro de uma colum, é necessário essa propriedade para reconhecer
+                      // e montar os elementos.
+                      shrinkWrap: true,
+                      itemCount: state.names.length,
+                      itemBuilder: (context, index) {
+                        final name = state.names[index];
+                        return ListTile(
+                          title: Text(name),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Expanded(
+                      child: Center(
+                        child: Text('Nenhum nome cadastrado.'),
+                      ),
+                    );
+                  }
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),*/
+          ],
+        ),
       ),
     );
   }
