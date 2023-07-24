@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
                 ButtonCard(
                   title: 'Example',
                   onPressed: () {
-                    debugPrint('Example');
+                    Navigator.of(context).pushNamed('/bloc/example/');
                   },
                   width: 150,
                   height: 150,
