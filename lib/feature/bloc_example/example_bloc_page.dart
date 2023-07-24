@@ -72,6 +72,19 @@ class ExampleBlocPage extends StatelessWidget {
                 return const SizedBox.shrink();
               },
             ),
+            const SizedBox(
+              height: 5,
+            ),
+            FloatingActionButton(
+              elevation: 5.0,
+              onPressed: () {
+                const name = 'Victor Teste';
+                context
+                    .read<ExampleBloc>()
+                    .add(ExampleAddNameEvent(name: name));
+              },
+              child: const Icon(Icons.add),
+            ),
             // Usar esse BlocSelector pra listView ou o BlocBuilder.
             BlocSelector<ExampleBloc, ExampleState, List<String>>(
               selector: (state) {
