@@ -13,6 +13,14 @@ class ExampleBlocPage extends StatelessWidget {
       ),
       // BlocLister é responsável em escutar as alterações.
       body: BlocListener<ExampleBloc, ExampleState>(
+        // ListenWhen tem a responsabilidade adicionar regra para o listener
+        // executar ou não dependendo da condição configurada dentro do listenWhen.
+        listenWhen: (previous, current) {
+          if (previous is ExampleStateInitial && current is ExampleStateData) {
+            return current.names.length > 4;
+          }
+          return false;
+        },
         listener: (context, state) {
           if (state is ExampleStateData) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -25,6 +33,15 @@ class ExampleBlocPage extends StatelessWidget {
         child: Column(
           children: [
             BlocConsumer<ExampleBloc, ExampleState>(
+              // BuildWhen tem a responsabilidade adicionar regra para o builder
+              // executar ou não dependendo da condição configurada dentro do buildWhen.
+              buildWhen: (previous, current) {
+                if (previous is ExampleStateInitial &&
+                    current is ExampleStateData) {
+                  return current.names.length > 4;
+                }
+                return false;
+              },
               builder: (_, state) {
                 if (state is ExampleStateData) {
                   return Text('Total de nomes é ${state.names.length}');
