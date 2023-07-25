@@ -1,5 +1,6 @@
 import 'package:contact_bloc/feature/bloc_example/bloc_estrutura_example/example_bloc.dart';
 import 'package:contact_bloc/feature/bloc_example/bloc_freezed/example_freezed_bloc.dart';
+import 'package:contact_bloc/feature/bloc_example/contacts/list/contacts_list_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_freezed_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_page.dart';
 import 'package:contact_bloc/pages/home_page.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
                 ..add(const ExampleFreezedEvent.findNames()),
               child: const ExampleBlocFreezedPage(),
             ),
+        '/contacts/list': (context) => const ContactsListPage(),
       },
     );
   }

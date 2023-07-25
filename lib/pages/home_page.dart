@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                 ButtonCard(
                   title: 'Contact',
                   onPressed: () {
-                    debugPrint('Contact');
+                    Navigator.of(context).pushNamed('/contacts/list');
                   },
                   width: 150,
                   height: 150,
