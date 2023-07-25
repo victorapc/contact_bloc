@@ -85,22 +85,26 @@ class ExampleBlocPage extends StatelessWidget {
                 return [];
               },
               builder: (context, names) {
-                return ListView.builder(
-                  // Quando tem ListView dentro de uma colum, é necessário essa propriedade para reconhecer
-                  // e montar os elementos.
-                  shrinkWrap: true,
-                  itemCount: names.length,
-                  itemBuilder: (context, index) {
-                    final name = names[index];
-                    return ListTile(
-                      onTap: () {
-                        context
-                            .read<ExampleBloc>()
-                            .add(ExampleRemoveNameEvent(name: name));
-                      },
-                      title: Text(name),
-                    );
-                  },
+                // Para caso de um ListView dentro de uma colum é preciso usar o
+                // widget Expanded para funcionar o scroll do ListView.
+                return Expanded(
+                  child: ListView.builder(
+                    // Quando tem ListView dentro de uma colum, é necessário essa propriedade para reconhecer
+                    // e montar os elementos.
+                    shrinkWrap: true,
+                    itemCount: names.length,
+                    itemBuilder: (context, index) {
+                      final name = names[index];
+                      return ListTile(
+                        onTap: () {
+                          context
+                              .read<ExampleBloc>()
+                              .add(ExampleRemoveNameEvent(name: name));
+                        },
+                        title: Text(name),
+                      );
+                    },
+                  ),
                 );
               },
             ),
