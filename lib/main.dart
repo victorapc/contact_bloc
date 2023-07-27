@@ -2,6 +2,8 @@ import 'package:contact_bloc/feature/bloc_example/bloc_estrutura_example/example
 import 'package:contact_bloc/feature/bloc_example/bloc_freezed/example_freezed_bloc.dart';
 import 'package:contact_bloc/feature/bloc_example/contacts/list/contact_bloc/contact_list_bloc.dart';
 import 'package:contact_bloc/feature/bloc_example/contacts/list/contacts_list_page.dart';
+import 'package:contact_bloc/feature/bloc_example/contacts/register/contact_register_page.dart';
+import 'package:contact_bloc/feature/bloc_example/contacts/update/contact_update_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_freezed_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_page.dart';
 import 'package:contact_bloc/pages/home_page.dart';
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
                   ..add(const ContactListEvent.findAll()),
                 child: const ContactsListPage(),
               ),
+          '/contacts/register': (context) => const ContactRegisterPage(),
+          '/contacts/update': (context) => const ContactUpdatePage(),
         },
       ),
     );
