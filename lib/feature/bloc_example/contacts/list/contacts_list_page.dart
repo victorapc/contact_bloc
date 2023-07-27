@@ -18,7 +18,11 @@ class ContactsListPage extends StatelessWidget {
           //Navigator.of(context).pushNamed('/contacts/register');
           // OU
           await Navigator.pushNamed(context, '/contacts/register');
-          context.read<ContactListBloc>().add(const ContactListEvent.findAll());
+          if (context.mounted) {
+            context
+                .read<ContactListBloc>()
+                .add(const ContactListEvent.findAll());
+          }
         },
         child: const Icon(Icons.add),
       ),
