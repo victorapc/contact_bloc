@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                 ButtonCard(
                   title: 'Contact Cubit',
                   onPressed: () {
-                    debugPrint('Contact Cubit');
+                    Navigator.of(context).pushNamed('/contacts/cubit/list');
                   },
                   width: 150,
                   height: 150,

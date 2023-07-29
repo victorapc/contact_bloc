@@ -8,11 +8,14 @@ import 'package:contact_bloc/feature/bloc_example/contacts/update/contact_bloc/b
 import 'package:contact_bloc/feature/bloc_example/contacts/update/contact_update_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_freezed_page.dart';
 import 'package:contact_bloc/feature/bloc_example/example_bloc_page.dart';
+import 'package:contact_bloc/feature/contacts_cubit/list/contacts_list_cubit_page.dart';
 import 'package:contact_bloc/models/contact_model.dart';
 import 'package:contact_bloc/pages/home_page.dart';
 import 'package:contact_bloc/repositories/contacts_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'feature/contacts_cubit/list/cubit/contact_list_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,6 +50,8 @@ class MyApp extends StatelessWidget {
               ),
           '/contacts/list': (context) => BlocProvider(
                 create: (_) => ContactListBloc(
+                    // No caso do context.read pode tirar caso queria <ContactsRepository>
+                    // Pois todo esse bloco esta dentro de um RepositoryProvider.
                     repository: context.read<ContactsRepository>())
                   ..add(const ContactListEvent.findAll()),
                 child: const ContactsListPage(),
@@ -66,7 +71,14 @@ class MyApp extends StatelessWidget {
                 contact: contact,
               ),
             );
-          }
+          },
+          '/contacts/cubit/list': (context) {
+            return BlocProvider(
+              create: (context) =>
+                  ContactListCubit(repository: context.read())..findAll(),
+              child: const ContactsListCubitPage(),
+            );
+          },
         },
       ),
     );

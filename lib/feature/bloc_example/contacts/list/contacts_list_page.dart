@@ -54,60 +54,57 @@ class ContactsListPage extends StatelessWidget {
         child: RefreshIndicator(
           onRefresh: () async => context.read<ContactListBloc>()
             ..add(const ContactListEvent.findAll()),
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                child: Column(
-                  children: [
-                    Loader<ContactListBloc, ContactListState>(
-                      selector: (state) {
-                        return state.maybeWhen(
-                          loading: () => true,
-                          orElse: () => false,
-                        );
-                      },
-                    ),
-                    BlocSelector<ContactListBloc, ContactListState,
-                        List<ContactModel>>(
-                      selector: (state) {
-                        return state.maybeWhen(
-                          data: (contacts) => contacts,
-                          orElse: () => [],
-                        );
-                      },
-                      builder: (_, contacts) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: contacts.length,
-                          // Tirando o scroll do listview para não dar problema
-                          // no RefreshIndicator.
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final contact = contacts[index];
-                            return ListTile(
-                              onLongPress: () {
-                                context.read<ContactListBloc>().add(
-                                    ContactListEvent.delete(model: contact));
-                              },
-                              onTap: () async {
-                                await Navigator.pushNamed(
-                                    context, '/contacts/update',
-                                    arguments: contact);
-                                if (context.mounted) {
-                                  context
-                                      .read<ContactListBloc>()
-                                      .add(const ContactListEvent.findAll());
-                                }
-                              },
-                              title: Text(contact.name),
-                              subtitle: Text(contact.email),
-                            );
+          child: Column(
+            children: [
+              Loader<ContactListBloc, ContactListState>(
+                selector: (state) {
+                  return state.maybeWhen(
+                    loading: () => true,
+                    orElse: () => false,
+                  );
+                },
+              ),
+              BlocSelector<ContactListBloc, ContactListState,
+                  List<ContactModel>>(
+                selector: (state) {
+                  return state.maybeWhen(
+                    data: (contacts) => contacts,
+                    orElse: () => [],
+                  );
+                },
+                builder: (_, contacts) {
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: contacts.length,
+                      // Tirando o scroll do listview para não dar problema
+                      // no RefreshIndicator.
+                      //physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final contact = contacts[index];
+                        return ListTile(
+                          onLongPress: () {
+                            context
+                                .read<ContactListBloc>()
+                                .add(ContactListEvent.delete(model: contact));
                           },
+                          onTap: () async {
+                            await Navigator.pushNamed(
+                                context, '/contacts/update',
+                                arguments: contact);
+                            if (context.mounted) {
+                              context
+                                  .read<ContactListBloc>()
+                                  .add(const ContactListEvent.findAll());
+                            }
+                          },
+                          title: Text(contact.name),
+                          subtitle: Text(contact.email),
                         );
                       },
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ],
           ),
